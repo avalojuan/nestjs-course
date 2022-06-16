@@ -8,33 +8,28 @@ export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
   create(email: string, password: string) {
-    const user = this.repo.create({email, password});
+    const user = this.repo.create({ email, password });
 
     return this.repo.save(user);
   }
 
   findOne(id: number) {
-    return this.repo.findOne({where: {id}})
+    if (!id) return null;
+    return this.repo.findOne({ where: { id } });
   }
 
   find(email: string) {
-    return this.repo.find({where: {email}})
+    return this.repo.find({ where: { email } });
   }
 
   async update(id: number, attrs: Partial<User>) {
     const user = await this.findOne(id);
-    if(!user) {
-      throw new NotFoundException('User Not found')
-    }
     Object.assign(user, attrs);
-    return this.repo.save(user);    
+    return this.repo.save(user);
   }
 
   async remove(id: number) {
     const user = await this.findOne(id);
-    if(!user) {
-      throw new NotFoundException('User Not Found')
-    }
     return this.repo.remove(user);
   }
 }

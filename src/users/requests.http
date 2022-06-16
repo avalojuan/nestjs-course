@@ -1,14 +1,21 @@
-### 
+### Sign UP
 POST http://localhost:3000/auth/signup
 content-type: application/json
 
 {
-  "email": "asd@gg.com",
-  "password": "mygreatpw",
-  "eia": "te" }
+  "email": "asd2@gg.com",
+  "password": "mygreatpw"}
+
+### Sign IN
+POST http://localhost:3000/auth/signin
+content-type: application/json
+
+{
+  "email": "asd2@gg.com",
+  "password": "mygreatpw"}
 
 ### Find a particular user by id
-GET http://localhost:3000/auth/1
+GET http://localhost:3000/auth/2
 
 ### Find all users with a given email
 GET http://localhost:3000/auth?email=asd@gg.com
@@ -18,7 +25,21 @@ DELETE http://localhost:3000/auth/1
 
 ### Update a user
 PATCH http://localhost:3000/auth/2
+content-type: application/json
 
 {
-  "email":"newmail@gmai.com"
+  "email": "newmgail@gmai.com"
 }
+
+### Set a color
+GET http://localhost:3000/auth/colors/blue
+
+### Get the color
+
+GET http://localhost:3000/auth/colors
+
+### Who Am I
+GET http://localhost:3000/auth/whoami
+
+### SignOut
+POST http://localhost:3000/auth/signout
