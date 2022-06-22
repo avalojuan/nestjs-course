@@ -60,10 +60,21 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     // Create a fake copy of the users service
+    const users: User[] = [];
     fakeUsersService = {
-      find: () => Promise.resolve([]),
-      create: (email: string, password: string) =>
-        Promise.resolve({ id: 1, email, password } as User),
+      find: (email: string) => {
+        const filteredUsers = users.filter((user) => user.email === email);
+        return Promise.resolve(filteredUsers);
+      },
+      create: (email: string, password: string) => {
+        const user = {
+          id: Math.floor(Math.random() * 999999),
+          email,
+          password,
+        } as User;
+        users.push(user);
+        return Promise.resolve(user);
+      },
     };
 
     const module = await Test.createTestingModule({
@@ -93,10 +104,7 @@ describe('AuthService', () => {
   });
 
   it('throws an error if user signs up with email that is in use', async () => {
-    fakeUsersService.find = () =>
-      Promise.resolve([
-        { id: 1, email: 'asd@asd.com', password: 'asdasd' } as User,
-      ]);
+    await service.signup('asd@asd.com', 'asdasd');
 
     try {
       await service.signup('asd@asd.com', 'asdasd');
@@ -104,5 +112,21 @@ describe('AuthService', () => {
       expect(err).toBeInstanceOf(BadRequestException);
       expect(err.message).toBe('email alrefady in use');
     }
+  });
+
+  it('throws if signin is called with an unused email', (done) => {
+    service.signin('asd@asd.com', 'asdasd').catch((e) => done());
+  });
+
+  it('throws if an invalid password is provided', (done) => {
+    service.signup('asd@asd.com', 'asdasd').then((result) => {
+      service.signin('asd@asd.com', 'asdasd2').catch((e) => done());
+    });
+  });
+
+  it('returns a user if correct password is provided', async () => {
+    await service.signup('asd@asd.com', 'asdasd');
+    const user = await service.signin('asd@asd.com', 'asdasd');
+    expect(user).toBeDefined();
   });
 });
