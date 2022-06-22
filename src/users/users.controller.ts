@@ -14,7 +14,7 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
 import { NotFoundException } from '@nestjs/common';
-import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { Serialize } from '../interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
